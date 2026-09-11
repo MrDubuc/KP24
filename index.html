@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <title>KIP24 | KCI Studios Dashboard</title>
+
+    <style>
+        :root {
+            --bg: #0d1b6f;
+            --card: #13246e;
+            --accent: #5cc8ff;
+            --text: #eef3ff;
+            --border: #2f4599;
+            --pill: #1a2e7d;
+            --gold: #d4af37;
+            --gold-bright: #f2d675;
+            --gold-dark: #8f6b12;
+            --header-height: 92px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background: var(--bg);
+            color: var(--text);
+            font-family: "Segoe UI", Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            border: 3px solid var(--gold);
+            box-shadow:
+                inset 0 0 0 1px var(--gold-bright),
+                inset 0 0 24px rgba(212, 175, 55, 0.16);
+        }
+
+        .topbar {
+            height: var(--header-height);
+            min-height: var(--header-height);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            padding: 16px 22px;
+            background:
+                radial-gradient(circle at top left, rgba(92, 200, 255, 0.18), transparent 35%),
+                linear-gradient(180deg, #17308c 0%, #0d1b6f 100%);
+            border-bottom: 2px solid var(--gold);
+            box-shadow: inset 0 -1px 0 var(--gold-bright);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            min-width: 0;
+        }
+
+        .brand-text {
+            font-size: clamp(1.6rem, 2.5vw, 2.8rem);
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #fff;
+            text-shadow: 0 0 22px rgba(92, 200, 255, 0.2);
+            white-space: nowrap;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .datetime-box {
+            font-size: clamp(1rem, 1.7vw, 1.55rem);
+            font-weight: 800;
+            color: #fff;
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        .day-indicator {
+            font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+            font-weight: 800;
+            color: var(--accent);
+            background: var(--pill);
+            border: 1px solid rgba(92, 200, 255, 0.35);
+            border-radius: 999px;
+            padding: 10px 16px;
+            white-space: nowrap;
+        }
+
+        .grid {
+            flex: 1 1 auto;
+            min-height: 0;
+            display: grid;
+            grid-template-columns: 1.55fr 0.65fr;
+            grid-template-rows: 1.2fr 0.8fr;
+            gap: 15px;
+            padding: 15px;
+        }
+
+        .quadrant {
+            background: var(--card);
+            border-radius: 15px;
+            border: 2px solid var(--gold);
+            box-shadow:
+                0 0 0 1px rgba(143, 107, 18, 0.8),
+                0 8px 22px rgba(0, 0, 0, 0.24),
+                inset 0 0 14px rgba(212, 175, 55, 0.07);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            min-height: 0;
+        }
+
+        .label {
+            background: rgba(10, 20, 80, 0.65);
+            padding: 10px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-align: center;
+            color: var(--accent);
+            border-bottom: 1px solid var(--gold);
+            box-shadow: inset 0 -1px 0 rgba(242, 214, 117, 0.35);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        #bulletin-wrap {
+            position: relative;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        #bulletin {
+            font-size: 2rem;
+            font-weight: 800;
+            line-height: 1.35;
+            color: #fff;
+            word-break: break-word;
+            width: 100%;
+            opacity: 1;
+            transition: opacity 0.35s ease;
+        }
+
+        #announcement-counter {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(92, 200, 255, 0.12);
+            color: var(--accent);
+            border: 1px solid rgba(92, 200, 255, 0.35);
+            border-radius: 999px;
+            padding: 6px 10px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            letter-spacing: 0.03em;
+        }
+
+        #poster-stage {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: #08113f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        #poster-image {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            opacity: 1;
+            transition: opacity 0.35s ease;
+            display: block;
+        }
+
+        #weather {
+            padding: 16px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            overflow: hidden;
+        }
+
+        .w-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.08rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 8px 0;
+            gap: 12px;
+        }
+
+        .w-row:last-child {
+            border-bottom: none;
+        }
+
+        .weather-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 0;
+            flex: 1 1 auto;
+        }
+
+        .weather-icon {
+            font-size: 2rem;
+            line-height: 1;
+            width: 2.2rem;
+            text-align: center;
+            flex: 0 0 auto;
+        }
+
+        .weather-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            min-width: 0;
+        }
+
+        .weather-day {
+            font-weight: 800;
+            font-size: 1.08rem;
+        }
+
+        .weather-label {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #dbe7ff;
+        }
+
+        .weather-right {
+            text-align: right;
+            white-space: nowrap;
+            flex: 0 0 auto;
+        }
+
+        .weather-temp {
+            white-space: nowrap;
+            font-size: 1.02rem;
+            font-weight: 800;
+        }
+
+        .weather-precip {
+            font-size: 0.84rem;
+            font-weight: 700;
+            color: #8ed8ff;
+            margin-top: 3px;
+        }
+
+        @media (max-width: 1100px) {
+            .grid {
+                grid-template-columns: 1.45fr 0.75fr;
+                grid-template-rows: 1.1fr 0.9fr;
+            }
+
+            #bulletin {
+                font-size: 1.6rem;
+            }
+
+            .weather-icon {
+                font-size: 1.6rem;
+                width: 1.8rem;
+            }
+
+            .weather-day {
+                font-size: 0.98rem;
+            }
+
+            .weather-label,
+            .weather-precip {
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 1000px) {
+            .topbar {
+                height: auto;
+                min-height: 0;
+                padding: 14px 16px;
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .brand {
+                justify-content: center;
+            }
+
+            .topbar-right {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 900px) {
+            html, body {
+                overflow: auto;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto;
+                min-height: 0;
+            }
+
+            .quadrant {
+                min-height: 320px;
+            }
+
+            #bulletin-wrap {
+                padding: 24px;
+            }
+
+            #bulletin {
+                font-size: 1.5rem;
+            }
+
+            .datetime-box {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-text">KCI Studios</div>
+        </div>
+
+        <div class="topbar-right">
+            <div id="current-datetime" class="datetime-box">Loading date and time...</div>
+            <div id="day-indicator" class="day-indicator">Day 1</div>
+        </div>
+    </header>
+
+    <main class="grid">
+        <div class="quadrant">
+            <div class="label">YouTube Feed</div>
+            <iframe
+                title="YouTube Playlist"
+                src="https://www.youtube-nocookie.com/embed/videoseries?list=PLbDMHJLxSXFnvLD5_ULegc0r_eLeHAvV-&amp;autoplay=1&amp;mute=1&amp;loop=1&amp;controls=1&amp;rel=0&amp;playsinline=1"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allow="autoplay; encrypted-media; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        </div>
+
+        <div class="quadrant">
+            <div class="label">Poster Rotation</div>
+            <div id="poster-stage">
+                <img id="poster-image" alt="Current poster" />
+            </div>
+        </div>
+
+        <div class="quadrant">
+            <div class="label">Daily Bulletin</div>
+            <div id="bulletin-wrap">
+                <div id="announcement-counter" hidden></div>
+                <div id="bulletin">Syncing with Google...</div>
+            </div>
+        </div>
+
+        <div class="quadrant">
+            <div class="label">Toronto Forecast</div>
+            <div id="weather">Loading weather...</div>
+        </div>
+    </main>
+
+<script>
+    const ANNOUNCEMENT_SHEET_ID = "1qmXO0jiSEnqr7Wxl0c06i74aS37AQTNjteS53Il9vsE";
+    const POSTER_SHEET_ID = "1bdNaXylOoWqgK80Cv7T0lFJIyx5HOmxNuWPMae3RBh0";
+
+    const WEATHER_URL =
+        "https://api.open-meteo.com/v1/forecast" +
+        "?latitude=43.70" +
+        "&longitude=-79.42" +
+        "&daily=temperature_2m_max,temperature_2m_min,weather_code,precipitation_probability_max,precipitation_sum" +
+        "&timezone=America%2FToronto" +
+        "&forecast_days=5";
+
+    const ANNOUNCEMENT_ROTATION_MS = 10000;
+    const POSTER_ROTATION_MS = 8000;
+
+    let posters = [];
+    let posterIndex = 0;
+
+    let todayAnnouncements = [];
+    let announcementIndex = 0;
+    let announcementRotationTimer = null;
+
+    function cleanCell(value) {
+        return String(value || "").trim();
+    }
+
+    // Google Visualization JSONP works from both a hosted page and a locally
+    // opened HTML file. It avoids the browser's CORS block on CSV fetches.
+    function loadGoogleSheetRows(sheetId) {
+        return new Promise((resolve, reject) => {
+            const callbackName = `kip24Sheet_${Date.now()}_${Math.floor(Math.random() * 100000)}`;
+            const script = document.createElement("script");
+            let timeoutId;
+
+            const cleanUp = () => {
+                clearTimeout(timeoutId);
+                script.remove();
+                try {
+                    delete window[callbackName];
+                } catch (_) {
+                    window[callbackName] = undefined;
+                }
+            };
+
+            window[callbackName] = (response) => {
+                try {
+                    if (!response || response.status === "error" || !response.table) {
+                        throw new Error("Google Sheet returned no readable table.");
+                    }
+
+                    const columns = response.table.cols || [];
+                    const headers = columns.map((column) =>
+                        cleanCell(column && (column.label || column.id))
+                    );
+
+                    const rows = (response.table.rows || []).map((sheetRow) =>
+                        columns.map((_, columnIndex) => {
+                            const cell = sheetRow.c && sheetRow.c[columnIndex];
+                            if (!cell) return "";
+                            return cleanCell(cell.f ?? cell.v ?? "");
+                        })
+                    );
+
+                    cleanUp();
+                    resolve({ headers, rows });
+                } catch (error) {
+                    cleanUp();
+                    reject(error);
+                }
+            };
+
+            script.onerror = () => {
+                cleanUp();
+                reject(new Error("Google Sheet could not be reached."));
+            };
+
+            timeoutId = setTimeout(() => {
+                cleanUp();
+                reject(new Error("Google Sheet request timed out."));
+            }, 15000);
+
+            const tqx = encodeURIComponent(`out:json;responseHandler:${callbackName}`);
+            script.src =
+                `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq` +
+                `?tqx=${tqx}&headers=1&_=${Date.now()}`;
+            document.head.appendChild(script);
+        });
+    }
+
+    function getTorontoNow() {
+        return new Date();
+    }
+
+    function getTorontoDateParts(date = getTorontoNow()) {
+        const parts = new Intl.DateTimeFormat("en-CA", {
+            timeZone: "America/Toronto",
+            year: "numeric",
+            month: "numeric",
+            day: "numeric"
+        }).formatToParts(date);
+
+        const values = Object.fromEntries(
+            parts.filter((part) => part.type !== "literal").map((part) => [part.type, part.value])
+        );
+
+        return {
+            year: Number(values.year),
+            month: Number(values.month),
+            day: Number(values.day)
+        };
+    }
+
+    function parseSheetDateParts(input) {
+        const clean = cleanCell(input);
+        if (!clean) return null;
+
+        let match = clean.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+        if (match) {
+            return {
+                month: Number(match[1]),
+                day: Number(match[2]),
+                year: Number(match[3])
+            };
+        }
+
+        match = clean.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+        if (match) {
+            return {
+                year: Number(match[1]),
+                month: Number(match[2]),
+                day: Number(match[3])
+            };
+        }
+
+        return null;
+    }
+
+    function cellContainsDate(input, targetParts) {
+        const clean = cleanCell(input);
+        if (!clean) return false;
+
+        // Handles one or several numeric dates in a Google Forms response cell.
+        const numericDates = clean.match(/\b(?:\d{1,2}\/\d{1,2}\/\d{4}|\d{4}-\d{1,2}-\d{1,2})\b/g) || [];
+        if (numericDates.some((value) => sameDateParts(parseSheetDateParts(value), targetParts))) {
+            return true;
+        }
+
+        // Also handles formatted values such as "September 11, 2026".
+        if (numericDates.length === 0 && /[A-Za-z]/.test(clean)) {
+            const parsed = new Date(clean);
+            if (!Number.isNaN(parsed.getTime())) {
+                return sameDateParts({
+                    year: parsed.getFullYear(),
+                    month: parsed.getMonth() + 1,
+                    day: parsed.getDate()
+                }, targetParts);
+            }
+        }
+
+        return false;
+    }
+
+    function isMarkedCell(value) {
+        const clean = cleanCell(value).toLowerCase();
+        return !!clean && !["false", "no", "n", "0", "off", "unchecked"].includes(clean);
+    }
+
+    function findAnnouncementColumn(headers) {
+        const exactMatch = headers.findIndex((header) =>
+            /\b(announcement|bulletin|message)\b/i.test(header)
+        );
+
+        // Column D was used by the original KIP24 form.
+        return exactMatch >= 0 ? exactMatch : Math.min(3, Math.max(0, headers.length - 1));
+    }
+
+    function rowIsScheduledToday(row, headers, announcementColumn, todayParts) {
+        // The form places all requested announcement dates to the right of the
+        // announcement. Scan every one rather than assuming there are only three.
+        for (let i = announcementColumn + 1; i < Math.max(row.length, headers.length); i++) {
+            const cell = row[i] || "";
+            const header = headers[i] || "";
+
+            if (cellContainsDate(cell, todayParts)) return true;
+
+            // Supports date-named columns whose cells contain TRUE, Yes, X, etc.
+            if (cellContainsDate(header, todayParts) && isMarkedCell(cell)) return true;
+        }
+
+        return false;
+    }
+
+    function sameDateParts(a, b) {
+        return !!a && !!b &&
+            a.year === b.year &&
+            a.month === b.month &&
+            a.day === b.day;
+    }
+
+    function extractDriveFileId(url) {
+        const clean = cleanCell(url);
+        if (!clean) return null;
+
+        const fromFilePath = clean.match(/\/file\/d\/([^/]+)/);
+        if (fromFilePath) return fromFilePath[1];
+
+        const fromQueryId = clean.match(/[?&]id=([^&]+)/);
+        if (fromQueryId) return fromQueryId[1];
+
+        return null;
+    }
+
+    function driveShareUrlToImage(url) {
+        const fileId = extractDriveFileId(url);
+        if (!fileId) return null;
+        return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1600`;
+    }
+
+    function updateDateTime() {
+        const now = getTorontoNow();
+        const dayNumber = now.getDate();
+        const dayLabel = dayNumber % 2 === 1 ? "Day 1" : "Day 2";
+
+        const dateText = now.toLocaleString("en-CA", {
+            timeZone: "America/Toronto",
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            hour: "numeric",
+            minute: "2-digit",
+            second: "2-digit"
+        });
+
+        document.getElementById("current-datetime").textContent = dateText;
+        document.getElementById("day-indicator").textContent = dayLabel;
+    }
+
+    function getWeatherIcon(code) {
+        if (code === 0) return "☀️";
+        if (code === 1) return "🌤️";
+        if (code === 2) return "⛅";
+        if (code === 3) return "☁️";
+        if ([45, 48].includes(code)) return "🌫️";
+        if ([51, 53, 55, 56, 57].includes(code)) return "🌦️";
+        if ([61, 63, 65, 66, 67, 80, 81, 82].includes(code)) return "🌧️";
+        if ([71, 73, 75, 77, 85, 86].includes(code)) return "❄️";
+        if ([95, 96, 99].includes(code)) return "⛈️";
+        return "🌡️";
+    }
+
+    function getWeatherLabel(code) {
+        if (code === 0) return "Clear";
+        if (code === 1) return "Mainly clear";
+        if (code === 2) return "Partly cloudy";
+        if (code === 3) return "Overcast";
+        if ([45, 48].includes(code)) return "Fog";
+        if ([51, 53, 55].includes(code)) return "Drizzle";
+        if ([56, 57].includes(code)) return "Freezing drizzle";
+        if ([61, 63, 65].includes(code)) return "Rain";
+        if ([66, 67].includes(code)) return "Freezing rain";
+        if ([71, 73, 75, 77].includes(code)) return "Snow";
+        if ([80, 81, 82].includes(code)) return "Showers";
+        if ([85, 86].includes(code)) return "Snow showers";
+        if ([95, 96, 99].includes(code)) return "Thunderstorm";
+        return "Forecast";
+    }
+
+    async function updateWeather() {
+        try {
+            const res = await fetch(WEATHER_URL, { cache: "no-store" });
+            if (!res.ok) throw new Error(`Weather request failed: ${res.status}`);
+
+            const data = await res.json();
+            let html = "";
+
+            data.daily.time.forEach((date, i) => {
+                const day = new Date(date + "T00:00").toLocaleDateString("en-US", {
+                    weekday: "short"
+                });
+
+                const max = Math.round(data.daily.temperature_2m_max[i]);
+                const min = Math.round(data.daily.temperature_2m_min[i]);
+                const code = data.daily.weather_code[i];
+                const precipChance = data.daily.precipitation_probability_max[i];
+                const precipAmount = data.daily.precipitation_sum[i];
+
+                const icon = getWeatherIcon(code);
+                const label = getWeatherLabel(code);
+
+                html += `
+                    <div class="w-row">
+                        <div class="weather-left">
+                            <div class="weather-icon" aria-hidden="true">${icon}</div>
+                            <div class="weather-meta">
+                                <div class="weather-day">${day}</div>
+                                <div class="weather-label">${label}</div>
+                            </div>
+                        </div>
+                        <div class="weather-right">
+                            <div class="weather-temp">${max}° / ${min}°</div>
+                            <div class="weather-precip">${precipChance ?? 0}% · ${precipAmount ?? 0} mm</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            document.getElementById("weather").innerHTML = html;
+        } catch (error) {
+            console.error("Weather error:", error);
+            document.getElementById("weather").innerText = "Weather unavailable.";
+        }
+    }
+
+    function renderAnnouncement() {
+        const bulletinEl = document.getElementById("bulletin");
+        const counterEl = document.getElementById("announcement-counter");
+
+        if (!todayAnnouncements.length) {
+            bulletinEl.textContent = "No announcements found for today.";
+            counterEl.hidden = true;
+            counterEl.textContent = "";
+            return;
+        }
+
+        const currentMessage = todayAnnouncements[announcementIndex] || todayAnnouncements[0];
+
+        bulletinEl.style.opacity = "0";
+
+        setTimeout(() => {
+            bulletinEl.textContent = currentMessage;
+
+            if (todayAnnouncements.length > 1) {
+                counterEl.hidden = false;
+                counterEl.textContent = `${announcementIndex + 1}(${todayAnnouncements.length})`;
+            } else {
+                counterEl.hidden = false;
+                counterEl.textContent = "1(1)";
+            }
+
+            bulletinEl.style.opacity = "1";
+        }, 180);
+    }
+
+    function startAnnouncementRotation() {
+        if (announcementRotationTimer) {
+            clearInterval(announcementRotationTimer);
+            announcementRotationTimer = null;
+        }
+
+        if (todayAnnouncements.length <= 1) return;
+
+        announcementRotationTimer = setInterval(() => {
+            announcementIndex = (announcementIndex + 1) % todayAnnouncements.length;
+            renderAnnouncement();
+        }, ANNOUNCEMENT_ROTATION_MS);
+    }
+
+    async function updateAnnouncements() {
+        try {
+            const { headers, rows } = await loadGoogleSheetRows(ANNOUNCEMENT_SHEET_ID);
+            const todayParts = getTorontoDateParts();
+            const announcementColumn = findAnnouncementColumn(headers);
+            const matches = [];
+
+            for (const row of rows) {
+                const announcementText = cleanCell(row[announcementColumn]);
+                if (!announcementText) continue;
+
+                if (rowIsScheduledToday(row, headers, announcementColumn, todayParts)) {
+                    matches.push(announcementText);
+                }
+            }
+
+            todayAnnouncements = [...new Set(matches)];
+
+            if (announcementIndex >= todayAnnouncements.length) {
+                announcementIndex = 0;
+            }
+
+            renderAnnouncement();
+            startAnnouncementRotation();
+        } catch (error) {
+            console.error("Announcement error:", error);
+            document.getElementById("bulletin").textContent =
+                "Announcements could not load. Confirm the sheet is shared as Anyone with the link — Viewer.";
+            const counterEl = document.getElementById("announcement-counter");
+            counterEl.hidden = true;
+            counterEl.textContent = "";
+        }
+    }
+
+    async function loadPostersFromSheet() {
+        try {
+            const { rows } = await loadGoogleSheetRows(POSTER_SHEET_ID);
+
+            const loadedPosters = [];
+
+            for (const row of rows) {
+                const active = cleanCell(row[0]).toUpperCase();
+                const imageUrlRaw = cleanCell(row[2]);
+
+                if (active !== "YES") continue;
+                if (!imageUrlRaw) continue;
+
+                const imageUrl = driveShareUrlToImage(imageUrlRaw);
+                if (!imageUrl) continue;
+
+                loadedPosters.push({ imageUrl });
+            }
+
+            posters = loadedPosters;
+
+            const imageEl = document.getElementById("poster-image");
+
+            if (!posters.length) {
+                imageEl.removeAttribute("src");
+                imageEl.alt = "No posters available";
+                return;
+            }
+
+            if (posterIndex >= posters.length) {
+                posterIndex = 0;
+            }
+
+            showPoster();
+        } catch (error) {
+            console.error("Poster sheet error:", error);
+        }
+    }
+
+    function showPoster() {
+        if (!posters.length) return;
+
+        const poster = posters[posterIndex];
+        const imgEl = document.getElementById("poster-image");
+        const preload = new Image();
+
+        preload.onload = () => {
+            imgEl.style.opacity = "0";
+
+            setTimeout(() => {
+                imgEl.src = poster.imageUrl;
+                imgEl.alt = "Current poster";
+                imgEl.style.opacity = "1";
+            }, 180);
+        };
+
+        preload.onerror = () => {
+            console.error("Poster failed to load:", poster.imageUrl);
+        };
+
+        preload.src = poster.imageUrl;
+    }
+
+    function rotatePoster() {
+        if (!posters.length) return;
+        posterIndex = (posterIndex + 1) % posters.length;
+        showPoster();
+    }
+
+    // Reload the complete dashboard every day at 12:01 a.m.
+    // This refreshes the playlist, announcements, posters, weather and school day.
+    function scheduleDailyRefresh() {
+        const now = new Date();
+        const nextRefresh = new Date(now);
+        nextRefresh.setDate(now.getDate() + 1);
+        nextRefresh.setHours(0, 1, 0, 0);
+
+        const millisecondsUntilRefresh = nextRefresh.getTime() - now.getTime();
+        setTimeout(() => window.location.reload(), millisecondsUntilRefresh);
+    }
+
+    async function init() {
+        updateDateTime();
+        scheduleDailyRefresh();
+
+        await Promise.all([
+            updateWeather(),
+            updateAnnouncements(),
+            loadPostersFromSheet()
+        ]);
+
+        setInterval(updateDateTime, 1000);
+        setInterval(updateWeather, 60 * 60 * 1000);
+        setInterval(updateAnnouncements, 5 * 60 * 1000);
+        setInterval(loadPostersFromSheet, 5 * 60 * 1000);
+        setInterval(rotatePoster, POSTER_ROTATION_MS);
+    }
+
+    init();
+</script>
+
+</body>
+</html>
