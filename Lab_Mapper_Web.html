@@ -1,0 +1,1783 @@
+<!doctype html>
+<!-- Lab Mapper Web: standalone client-side application; no server or external assets required. -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lab Mapper Web</title>
+  <meta name="description" content="Lab Mapper room planning and computer inventory">
+  <link rel="icon" type="image/png" href="data:image/png;base64,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">
+  <style>
+:root {
+  color-scheme: light;
+  --ink: #17212b;
+  --muted: #687481;
+  --line: #dce2e7;
+  --panel: #ffffff;
+  --canvas: #f8fafb;
+  --blue: #1768e5;
+  --blue-dark: #1057c6;
+  --blue-soft: #e9f1ff;
+  --red: #c43b44;
+  --red-soft: #fff0f1;
+  --green: #24855b;
+  --amber: #bd7215;
+  --shadow: 0 8px 30px rgba(33, 47, 61, 0.08);
+  --radius: 10px;
+  font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  min-width: 1060px;
+  overflow: hidden;
+  background: #edf1f5;
+  color: var(--ink);
+  font-size: 14px;
+}
+
+button, input, select, textarea { font: inherit; }
+button { color: inherit; }
+
+.app-header {
+  height: 72px;
+  display: grid;
+  grid-template-columns: 300px minmax(320px, 1fr) auto;
+  align-items: center;
+  gap: 22px;
+  padding: 0 22px;
+  background: #101a24;
+  color: #fff;
+}
+
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand strong { display: block; font-size: 18px; letter-spacing: -0.02em; }
+.brand small { display: block; margin-top: 2px; color: #a8b5c2; font-size: 11px; }
+
+.brand-mark {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4px;
+  padding: 5px;
+  border-radius: 8px;
+  background: var(--blue);
+}
+.brand-mark span { border-radius: 2px; background: #fff; opacity: 0.94; }
+
+.project-title-wrap {
+  justify-self: center;
+  width: min(100%, 560px);
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.project-title-wrap label { color: #a8b5c2; font-size: 12px; }
+.project-title-wrap input {
+  min-width: 0;
+  flex: 1;
+  padding: 8px 11px;
+  color: #fff;
+  background: #1b2935;
+  border: 1px solid #354553;
+  border-radius: 7px;
+  outline: none;
+}
+.project-title-wrap input:focus { border-color: #69a1f4; box-shadow: 0 0 0 3px rgba(23,104,229,.22); }
+.save-state { min-width: 62px; color: #9daab6; font-size: 11px; text-align: right; }
+.save-state.dirty { color: #ffd38a; }
+
+.file-actions { display: flex; gap: 7px; }
+.button {
+  min-height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: #fff;
+  cursor: pointer;
+  font-weight: 650;
+  transition: background .15s, border-color .15s, transform .05s;
+}
+.button:active, .tool-button:active, .icon-button:active { transform: translateY(1px); }
+.button-primary { border-color: var(--blue); background: var(--blue); color: #fff; }
+.button-primary:hover { background: var(--blue-dark); }
+.app-header .button-quiet { color: #e4e9ed; border-color: #3c4a57; background: #1b2935; }
+.app-header .button-quiet:hover { background: #2a3946; }
+
+.app-shell { height: calc(100vh - 72px); display: grid; grid-template-columns: 258px 1fr; }
+
+.room-sidebar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: 24px 18px 18px;
+  background: #f6f8fa;
+  border-right: 1px solid var(--line);
+}
+
+.sidebar-heading { display: flex; align-items: center; justify-content: space-between; margin: 0 4px 14px; }
+.eyebrow { margin: 0 0 3px; color: #74808b; font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+h2, h3 { margin: 0; letter-spacing: -.025em; }
+.sidebar-heading h2 { font-size: 21px; }
+
+.icon-button {
+  width: 34px;
+  height: 34px;
+  border: 1px solid #cfd7de;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--blue);
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+.icon-button:hover { border-color: #9db9df; background: var(--blue-soft); }
+
+.room-list { min-height: 82px; overflow: auto; display: grid; gap: 7px; align-content: start; }
+.room-card {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 36px 1fr auto;
+  align-items: center;
+  gap: 9px;
+  padding: 10px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+.room-card:hover { background: #fff; border-color: var(--line); }
+.room-card.active { background: #fff; border-color: #b6cff2; box-shadow: 0 3px 12px rgba(29, 67, 109, .07); }
+.room-thumbnail {
+  width: 36px;
+  height: 30px;
+  border: 2px solid #8b99a5;
+  border-radius: 4px;
+  background: repeating-linear-gradient(90deg, #fff 0 8px, #e7edf2 8px 9px);
+}
+.room-card.active .room-thumbnail { border-color: var(--blue); background-color: var(--blue-soft); }
+.room-card strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.room-card small { display: block; margin-top: 2px; color: var(--muted); font-size: 11px; }
+.room-card .room-repair-count { color: var(--red); font-size: 11px; font-weight: 700; }
+
+.room-actions { display: flex; gap: 12px; margin: 12px 4px 0; }
+.text-button { padding: 0; border: 0; background: transparent; color: var(--blue); font-size: 11px; cursor: pointer; }
+.text-button:hover { text-decoration: underline; }
+.danger-text { color: var(--red); }
+
+.project-health {
+  margin-top: auto;
+  padding: 15px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  box-shadow: 0 4px 16px rgba(33,47,61,.04);
+}
+.project-health h3 { font-size: 15px; }
+.project-health dl { margin: 13px 0 0; display: grid; gap: 7px; }
+.project-health dl div { display: flex; justify-content: space-between; }
+.project-health dt { color: var(--muted); }
+.project-health dd { margin: 0; font-weight: 750; }
+.serial-warning { margin: 12px 0 0; padding: 8px; border-radius: 6px; background: var(--red-soft); color: #8f2931; font-size: 11px; line-height: 1.35; }
+
+.workspace { min-width: 0; min-height: 0; display: flex; flex-direction: column; }
+.view-bar {
+  height: 55px;
+  flex: 0 0 55px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 22px;
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+.view-tabs { align-self: stretch; display: flex; gap: 22px; }
+.view-tab {
+  position: relative;
+  border: 0;
+  padding: 2px 2px 0;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-weight: 700;
+}
+.view-tab.active { color: var(--ink); }
+.view-tab.active::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--blue); border-radius: 3px 3px 0 0; }
+.current-room-name { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 12px; font-weight: 650; }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 3px rgba(36,133,91,.12); }
+
+.map-view, .inventory-view { min-height: 0; flex: 1; }
+.map-view { display: flex; flex-direction: column; }
+.map-toolbar {
+  min-height: 55px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 15px;
+  border-bottom: 1px solid var(--line);
+  background: #f9fbfc;
+}
+.tool-button {
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 10px;
+  border: 1px solid #d0d8df;
+  border-radius: 7px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 650;
+}
+.tool-button:hover { border-color: #aabfd7; background: #f4f8fc; }
+.tool-button:disabled { opacity: .45; cursor: default; }
+.tool-button:disabled:active { transform: none; }
+.tool-glyph { display: inline-block; }
+.desk-glyph { width: 16px; height: 10px; border: 2px solid #53687a; border-radius: 2px; }
+.computer-glyph { width: 15px; height: 12px; border: 2px solid #53687a; border-radius: 2px; box-shadow: 0 4px 0 -2px #53687a; }
+.tool-divider { width: 1px; height: 24px; margin: 0 2px; background: var(--line); }
+.toolbar-spacer { flex: 1; }
+.map-hint { color: #7b8791; font-size: 11px; }
+.delete-tool:not(:disabled) { border-color: #e3b5b9; color: var(--red); }
+
+.map-layout { min-height: 0; flex: 1; display: grid; grid-template-columns: minmax(0, 1fr) 290px; }
+.canvas-scroll { min-width: 0; min-height: 0; overflow: auto; padding: 34px; background: #e9eef2; }
+.room-canvas {
+  position: relative;
+  margin: 0 auto;
+  border: 2px solid #aab5bf;
+  border-radius: 5px;
+  background-color: var(--canvas);
+  background-image:
+    linear-gradient(#e4e9ed 1px, transparent 1px),
+    linear-gradient(90deg, #e4e9ed 1px, transparent 1px),
+    linear-gradient(#d7dfe5 1px, transparent 1px),
+    linear-gradient(90deg, #d7dfe5 1px, transparent 1px);
+  background-size: 10px 10px, 10px 10px, 50px 50px, 50px 50px;
+  box-shadow: var(--shadow);
+  touch-action: none;
+}
+.room-canvas::before {
+  content: attr(data-room-name);
+  position: absolute;
+  top: -25px;
+  left: -2px;
+  color: #53616d;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.map-item {
+  position: absolute;
+  user-select: none;
+  touch-action: none;
+  cursor: grab;
+}
+.map-item:active { cursor: grabbing; }
+.map-item.selected { z-index: 10; }
+.map-item.selected::after {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border: 2px solid var(--blue);
+  border-radius: 7px;
+  pointer-events: none;
+}
+.map-item.desk {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #697985;
+  border-radius: 5px;
+  background: #dce4e9;
+  color: #394954;
+  font-size: 12px;
+  font-weight: 750;
+  box-shadow: inset 0 -7px 0 rgba(63,80,93,.05);
+}
+.desk-label { overflow: hidden; padding: 4px 13px; text-overflow: ellipsis; white-space: nowrap; }
+
+.map-item.equipment {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  border: 1px solid #aab7c2;
+  border-radius: 8px;
+  background: #fff;
+  color: #344553;
+  box-shadow: 0 3px 10px rgba(39,56,70,.12);
+}
+.map-item.equipment.needs-repair { border-color: #dc969d; background: #fff7f7; }
+.equipment-icon { width: min(52%, 48px); height: min(46%, 42px); flex: 0 1 auto; color: #426079; }
+.equipment-icon svg { width: 100%; height: 100%; display: block; }
+.needs-repair .equipment-icon { color: var(--red); }
+.equipment-map-label {
+  width: 100%;
+  min-width: 0;
+  display: block;
+  padding: 0 4px;
+  text-align: center;
+  line-height: 1.05;
+}
+.equipment-map-label strong,
+.equipment-map-label small {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.equipment-map-label strong { color: #344553; font-size: 9px; font-weight: 800; }
+.equipment-map-label small { margin-top: 2px; color: #697985; font-size: 8px; }
+.resize-handle {
+  position: absolute;
+  right: -5px;
+  bottom: -5px;
+  z-index: 20;
+  width: 13px;
+  height: 13px;
+  display: none;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: var(--blue);
+  cursor: nwse-resize;
+}
+.selected .resize-handle { display: block; }
+
+.inspector { min-width: 0; overflow: auto; padding: 21px; border-left: 1px solid var(--line); background: #fff; }
+.inspector-empty { margin-top: 30px; color: var(--muted); text-align: center; line-height: 1.5; }
+.inspector-empty .empty-icon { width: 55px; height: 45px; margin: 0 auto 12px; border: 2px dashed #b7c1c9; border-radius: 6px; }
+.inspector h2 { margin: 2px 0 17px; font-size: 18px; }
+.inspector-section { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); }
+.field { display: grid; gap: 5px; margin-bottom: 12px; }
+.field label, .field > span { color: #687581; font-size: 11px; font-weight: 700; }
+.field input, .field select, .field textarea, .inventory-table input, .inventory-table select {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid #cbd4dc;
+  border-radius: 6px;
+  background: #fff;
+  color: var(--ink);
+  outline: none;
+}
+.field input, .field select { height: 36px; padding: 0 9px; }
+.field textarea { min-height: 72px; resize: vertical; padding: 9px; }
+.field input:focus, .field select:focus, .field textarea:focus, .inventory-table input:focus, .inventory-table select:focus { border-color: #73a5eb; box-shadow: 0 0 0 3px rgba(23,104,229,.11); }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.item-id { margin: 16px 0 0; color: #9aa4ad; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 9px; word-break: break-all; }
+.repair-banner { margin: -5px 0 14px; padding: 8px 10px; border-radius: 6px; background: var(--red-soft); color: #952b34; font-size: 11px; font-weight: 700; }
+
+.inventory-view { overflow: auto; padding: 24px; background: #f1f4f6; }
+.inventory-toolbar { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 18px; }
+.inventory-toolbar h2 { font-size: 23px; }
+.inventory-controls { display: flex; align-items: end; gap: 9px; }
+.search-box, .filter-box { display: grid; gap: 4px; color: var(--muted); font-size: 10px; font-weight: 750; }
+.search-box input, .filter-box select { height: 36px; border: 1px solid #cbd4dc; border-radius: 7px; background: #fff; padding: 0 10px; outline: none; }
+.search-box input { width: 260px; }
+.filter-box select { width: 130px; }
+
+.table-wrap { overflow: auto; border: 1px solid var(--line); border-radius: 10px; background: #fff; box-shadow: 0 5px 19px rgba(33,47,61,.05); }
+.inventory-table { width: 100%; min-width: 1330px; border-collapse: collapse; table-layout: fixed; }
+.inventory-table th { padding: 11px 10px; border-bottom: 1px solid var(--line); background: #f8fafb; color: #66737e; font-size: 10px; letter-spacing: .04em; text-align: left; text-transform: uppercase; }
+.inventory-table td { padding: 8px 10px; border-bottom: 1px solid #edf0f2; vertical-align: middle; }
+.inventory-table tr:last-child td { border-bottom: 0; }
+.inventory-table tr:hover td { background: #fbfcfd; }
+.inventory-table tr.duplicate-row td { background: #fff8f8; }
+.inventory-table th:nth-child(1) { width: 120px; }
+.inventory-table th:nth-child(2) { width: 170px; }
+.inventory-table th:nth-child(3) { width: 205px; }
+.inventory-table th:nth-child(4) { width: 180px; }
+.inventory-table th:nth-child(5) { width: 150px; }
+.inventory-table th:nth-child(6) { width: 175px; }
+.inventory-table th:nth-child(8) { width: 142px; }
+.inventory-table input, .inventory-table select { height: 34px; padding: 0 8px; }
+.inventory-table .serial-input.duplicate { border-color: #d47a82; color: #9d3038; background: #fff7f7; }
+.row-actions { display: flex; justify-content: flex-end; gap: 7px; }
+.row-button { padding: 5px 7px; border: 0; background: transparent; color: var(--blue); font-size: 11px; font-weight: 700; cursor: pointer; }
+.row-button:hover { text-decoration: underline; }
+.row-button.delete { color: var(--red); }
+.empty-inventory { display: grid; place-items: center; gap: 5px; padding: 70px 20px; color: var(--muted); }
+.empty-inventory strong { color: var(--ink); }
+
+.toast {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 100;
+  max-width: 420px;
+  padding: 11px 15px;
+  border-radius: 8px;
+  background: #142331;
+  color: #fff;
+  box-shadow: 0 8px 30px rgba(10,20,30,.25);
+  opacity: 0;
+  transform: translateY(9px);
+  pointer-events: none;
+  transition: opacity .18s, transform .18s;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+.toast.error { background: #9e3039; }
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(9, 18, 27, .56);
+  backdrop-filter: blur(2px);
+}
+.modal-card {
+  width: min(100%, 420px);
+  padding: 24px;
+  border: 1px solid #cfd7de;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 20px 60px rgba(7, 17, 27, .28);
+}
+.modal-card h2 { margin: 2px 0 18px; font-size: 21px; }
+.modal-card label { display: block; margin-bottom: 6px; color: #5d6974; font-size: 12px; font-weight: 750; }
+.modal-card input {
+  width: 100%;
+  height: 40px;
+  padding: 0 10px;
+  border: 1px solid #c4ced7;
+  border-radius: 7px;
+  outline: none;
+}
+.modal-card input:focus { border-color: #73a5eb; box-shadow: 0 0 0 3px rgba(23,104,229,.12); }
+.modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+@media (max-width: 1250px) {
+  .app-header { grid-template-columns: 245px minmax(260px, 1fr) auto; gap: 12px; }
+  .brand small, .map-hint { display: none; }
+  .map-layout { grid-template-columns: minmax(0, 1fr) 260px; }
+  .tool-button { padding-inline: 8px; }
+  .inventory-controls { flex-wrap: wrap; justify-content: flex-end; }
+}
+
+  </style>
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand" aria-label="Lab Mapper">
+      <span class="brand-mark" aria-hidden="true">
+        <span></span><span></span><span></span><span></span>
+      </span>
+      <span>
+        <strong>Lab Mapper</strong>
+        <small>Room plans + equipment records</small>
+      </span>
+    </div>
+
+    <div class="project-title-wrap">
+      <label for="projectName">Project</label>
+      <input id="projectName" type="text" maxlength="100" value="KCI Computer Labs">
+      <span id="saveState" class="save-state">Not saved</span>
+    </div>
+
+    <nav class="file-actions" aria-label="Project file actions">
+      <button id="newProjectBtn" class="button button-quiet" type="button">New</button>
+      <button id="openProjectBtn" class="button button-quiet" type="button">Open</button>
+      <button id="saveProjectBtn" class="button button-primary" type="button">Save</button>
+      <button id="saveAsBtn" class="button button-quiet" type="button">Save As</button>
+    </nav>
+  </header>
+
+  <main class="app-shell">
+    <aside class="room-sidebar">
+      <div class="sidebar-heading">
+        <div>
+          <p class="eyebrow">Building</p>
+          <h2>Rooms</h2>
+        </div>
+        <button id="addRoomBtn" class="icon-button" type="button" title="Add room" aria-label="Add room">+</button>
+      </div>
+
+      <div id="roomList" class="room-list"></div>
+
+      <div class="room-actions">
+        <button id="renameRoomBtn" class="text-button" type="button">Rename room</button>
+        <button id="deleteRoomBtn" class="text-button danger-text" type="button">Delete room</button>
+      </div>
+
+      <section class="project-health" aria-labelledby="projectHealthHeading">
+        <p class="eyebrow">Project summary</p>
+        <h3 id="projectHealthHeading">Inventory health</h3>
+        <dl>
+          <div><dt>Rooms</dt><dd id="roomCount">0</dd></div>
+          <div><dt>Equipment</dt><dd id="equipmentCount">0</dd></div>
+          <div><dt>Needs repair</dt><dd id="repairCount">0</dd></div>
+        </dl>
+        <p id="serialWarning" class="serial-warning" hidden></p>
+      </section>
+    </aside>
+
+    <section class="workspace">
+      <div class="view-bar">
+        <div class="view-tabs" role="tablist" aria-label="Lab Mapper views">
+          <button id="mapTab" class="view-tab active" type="button" role="tab" aria-selected="true">Map</button>
+          <button id="inventoryTab" class="view-tab" type="button" role="tab" aria-selected="false">Inventory list</button>
+        </div>
+        <div class="current-room-name">
+          <span class="status-dot"></span>
+          <span id="currentRoomName">Room 155</span>
+        </div>
+      </div>
+
+      <section id="mapView" class="map-view">
+        <div class="map-toolbar" aria-label="Map tools">
+          <button id="addDeskBtn" class="tool-button" type="button"><span class="tool-glyph desk-glyph"></span>Add desk</button>
+          <span class="tool-divider"></span>
+          <button class="tool-button add-equipment" data-type="Desktop Computer" type="button"><span class="tool-glyph computer-glyph"></span>Add computer</button>
+          <button class="tool-button add-equipment" data-type="Laptop" type="button">Add laptop</button>
+          <span class="tool-divider"></span>
+          <button id="copySelectedBtn" class="tool-button" type="button" disabled title="Copy selected item (Ctrl+C)">Copy</button>
+          <button id="pasteItemBtn" class="tool-button" type="button" disabled title="Paste copied item (Ctrl+V)">Paste</button>
+          <span class="toolbar-spacer"></span>
+          <span class="map-hint">Drag to move · use the corner handle to resize</span>
+          <button id="printMapBtn" class="tool-button" type="button">Print map</button>
+          <button id="deleteSelectedBtn" class="tool-button delete-tool" type="button" disabled>Delete selected</button>
+        </div>
+
+        <div class="map-layout">
+          <div class="canvas-scroll" id="canvasScroll">
+            <div id="roomCanvas" class="room-canvas" aria-label="Room map"></div>
+          </div>
+          <aside id="inspector" class="inspector" aria-label="Selected item details"></aside>
+        </div>
+      </section>
+
+      <section id="inventoryView" class="inventory-view" hidden>
+        <div class="inventory-toolbar">
+          <div>
+            <p class="eyebrow">Every mapped device</p>
+            <h2>Equipment inventory</h2>
+          </div>
+          <div class="inventory-controls">
+            <label class="search-box">
+              <span>Search</span>
+              <input id="inventorySearch" type="search" placeholder="Computer, student, serial, room or specifications">
+            </label>
+            <label class="filter-box">
+              <span>Room</span>
+              <select id="inventoryRoomFilter"></select>
+            </label>
+            <button id="inventoryAddBtn" class="button button-primary" type="button">Add computer</button>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table class="inventory-table">
+            <thead>
+              <tr>
+                <th>Room</th>
+                <th>Computer name</th>
+                <th>Type of computer/equipment</th>
+                <th>Serial number</th>
+                <th>Status</th>
+                <th>Student name</th>
+                <th>Specifications</th>
+                <th><span class="sr-only">Actions</span></th>
+              </tr>
+            </thead>
+            <tbody id="inventoryBody"></tbody>
+          </table>
+          <div id="emptyInventory" class="empty-inventory" hidden>
+            <strong>No matching equipment</strong>
+            <span>Add a computer from the map or change your search.</span>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <div id="textDialog" class="modal-backdrop" hidden role="dialog" aria-modal="true" aria-labelledby="textDialogTitle">
+    <form id="textDialogForm" class="modal-card">
+      <p class="eyebrow">Lab Mapper</p>
+      <h2 id="textDialogTitle">Enter a name</h2>
+      <label id="textDialogLabel" for="textDialogInput">Name</label>
+      <input id="textDialogInput" type="text" maxlength="100" autocomplete="off" required>
+      <div class="modal-actions">
+        <button id="textDialogCancel" class="button" type="button">Cancel</button>
+        <button id="textDialogConfirm" class="button button-primary" type="submit">Create</button>
+      </div>
+    </form>
+  </div>
+
+  <input id="browserFileInput" type="file" accept=".labmap,.json,application/json" hidden>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+(function attachModel(root, factory) {
+  const model = factory();
+  if (typeof module === 'object' && module.exports) module.exports = model;
+  if (root) root.LabModel = model;
+})(typeof globalThis !== 'undefined' ? globalThis : this, function createModelModule() {
+  const SCHEMA_VERSION = 2;
+  const STATUS_VALUES = ['Working', 'Needs Repair'];
+  const EQUIPMENT_TYPES = [
+    'Desktop Computer',
+    'Laptop',
+    'Monitor',
+    'Keyboard',
+    'Mouse',
+    'Printer',
+    'Other'
+  ];
+
+  function createId(prefix = 'item') {
+    const id = globalThis.crypto?.randomUUID?.()
+      || `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+    return `${prefix}-${id}`;
+  }
+
+  function clampNumber(value, fallback, min, max) {
+    const parsed = Number(value);
+    if (!Number.isFinite(parsed)) return fallback;
+    return Math.min(max, Math.max(min, parsed));
+  }
+
+  function cleanString(value, fallback = '', max = 5000) {
+    if (value === undefined || value === null) return fallback;
+    return String(value).slice(0, max);
+  }
+
+  function sanitizeComputerName(value) {
+    return cleanString(value, '', 63).replace(/[^A-Za-z0-9_-]/g, '');
+  }
+
+  function createRoom(name = 'Room 155') {
+    return {
+      id: createId('room'),
+      name: cleanString(name, 'New Room', 80),
+      width: 1200,
+      height: 760,
+      desks: []
+    };
+  }
+
+  function createProject(name = 'KCI Computer Labs') {
+    const now = new Date().toISOString();
+    return {
+      schemaVersion: SCHEMA_VERSION,
+      app: 'Lab Mapper',
+      name: cleanString(name, 'Untitled Lab Project', 100),
+      createdAt: now,
+      updatedAt: now,
+      rooms: [createRoom()],
+      equipment: []
+    };
+  }
+
+  function createDesk(roomId, count = 1) {
+    const offset = ((count - 1) % 8) * 24;
+    return {
+      id: createId('desk'),
+      roomId,
+      label: `Desk ${count}`,
+      x: 80 + offset,
+      y: 80 + offset,
+      width: 180,
+      height: 90
+    };
+  }
+
+  function createEquipment(roomId, type = 'Desktop Computer', count = 1) {
+    const normalizedType = EQUIPMENT_TYPES.includes(type) ? type : 'Other';
+    const offset = ((count - 1) % 10) * 22;
+    return {
+      id: createId('equipment'),
+      roomId,
+      type: normalizedType,
+      computerName: '',
+      studentName: '',
+      serial: '',
+      status: 'Working',
+      specs: '',
+      notes: '',
+      x: 320 + offset,
+      y: 130 + offset,
+      width: normalizedType === 'Keyboard' ? 110 : 88,
+      height: normalizedType === 'Keyboard' ? 62 : 88
+    };
+  }
+
+  function normalizeProject(raw) {
+    if (!raw || typeof raw !== 'object' || Array.isArray(raw)) {
+      throw new Error('This is not a valid Lab Mapper project.');
+    }
+    if (raw.schemaVersion && Number(raw.schemaVersion) > SCHEMA_VERSION) {
+      throw new Error('This project was created by a newer version of Lab Mapper.');
+    }
+
+    const roomIds = new Set();
+    const rooms = (Array.isArray(raw.rooms) ? raw.rooms : []).map((room, index) => {
+      let id = cleanString(room?.id, '', 120);
+      if (!id || roomIds.has(id)) id = createId('room');
+      roomIds.add(id);
+
+      const desks = (Array.isArray(room?.desks) ? room.desks : []).map((desk, deskIndex) => ({
+        id: cleanString(desk?.id, '', 120) || createId('desk'),
+        roomId: id,
+        label: cleanString(desk?.label, `Desk ${deskIndex + 1}`, 80),
+        x: clampNumber(desk?.x, 60, 0, 5000),
+        y: clampNumber(desk?.y, 60, 0, 5000),
+        width: clampNumber(desk?.width, 180, 60, 1000),
+        height: clampNumber(desk?.height, 90, 40, 1000)
+      }));
+
+      return {
+        id,
+        name: cleanString(room?.name, `Room ${index + 1}`, 80),
+        width: clampNumber(room?.width, 1200, 600, 5000),
+        height: clampNumber(room?.height, 760, 400, 5000),
+        desks
+      };
+    });
+
+    if (rooms.length === 0) rooms.push(createRoom());
+    const validRoomIds = new Set(rooms.map((room) => room.id));
+    const equipmentIds = new Set();
+    const equipment = (Array.isArray(raw.equipment) ? raw.equipment : []).map((item) => {
+      let id = cleanString(item?.id, '', 120);
+      if (!id || equipmentIds.has(id)) id = createId('equipment');
+      equipmentIds.add(id);
+      const type = EQUIPMENT_TYPES.includes(item?.type) ? item.type : 'Other';
+      const roomId = validRoomIds.has(item?.roomId) ? item.roomId : rooms[0].id;
+
+      return {
+        id,
+        roomId,
+        type,
+        computerName: sanitizeComputerName(item?.computerName),
+        studentName: cleanString(item?.studentName, '', 160),
+        serial: cleanString(item?.serial, '', 160).trim(),
+        status: STATUS_VALUES.includes(item?.status) ? item.status : 'Needs Repair',
+        specs: cleanString(item?.specs, '', 5000),
+        notes: cleanString(item?.notes, '', 5000),
+        x: clampNumber(item?.x, 320, 0, 5000),
+        y: clampNumber(item?.y, 130, 0, 5000),
+        width: clampNumber(item?.width, type === 'Keyboard' ? 110 : 88, 44, 1000),
+        height: clampNumber(item?.height, type === 'Keyboard' ? 62 : 88, 44, 1000)
+      };
+    });
+
+    const createdAt = cleanString(raw.createdAt, new Date().toISOString(), 40);
+    return {
+      schemaVersion: SCHEMA_VERSION,
+      app: 'Lab Mapper',
+      name: cleanString(raw.name, 'Untitled Lab Project', 100),
+      createdAt,
+      updatedAt: cleanString(raw.updatedAt, createdAt, 40),
+      rooms,
+      equipment
+    };
+  }
+
+  function getDuplicateSerials(equipment) {
+    const counts = new Map();
+    for (const item of equipment || []) {
+      const serial = cleanString(item.serial).trim().toUpperCase();
+      if (!serial) continue;
+      counts.set(serial, (counts.get(serial) || 0) + 1);
+    }
+    return [...counts.entries()]
+      .filter(([, count]) => count > 1)
+      .map(([serial]) => serial)
+      .sort();
+  }
+
+  function getDuplicateComputerNames(equipment) {
+    const counts = new Map();
+    for (const item of equipment || []) {
+      const computerName = sanitizeComputerName(item.computerName).toUpperCase();
+      if (!computerName) continue;
+      counts.set(computerName, (counts.get(computerName) || 0) + 1);
+    }
+    return [...counts.entries()]
+      .filter(([, count]) => count > 1)
+      .map(([computerName]) => computerName)
+      .sort();
+  }
+
+  return {
+    SCHEMA_VERSION,
+    STATUS_VALUES,
+    EQUIPMENT_TYPES,
+    createId,
+    sanitizeComputerName,
+    createRoom,
+    createProject,
+    createDesk,
+    createEquipment,
+    normalizeProject,
+    getDuplicateSerials,
+    getDuplicateComputerNames
+  };
+});
+
+  </script>
+  <script>
+(function startLabMapper() {
+  'use strict';
+
+  const Model = window.LabModel;
+  const byId = (id) => document.getElementById(id);
+  const WEB_RECOVERY_KEY = 'lab-mapper-web-recovery-v2';
+
+  const elements = {
+    projectName: byId('projectName'),
+    saveState: byId('saveState'),
+    roomList: byId('roomList'),
+    roomCount: byId('roomCount'),
+    equipmentCount: byId('equipmentCount'),
+    repairCount: byId('repairCount'),
+    serialWarning: byId('serialWarning'),
+    currentRoomName: byId('currentRoomName'),
+    mapTab: byId('mapTab'),
+    inventoryTab: byId('inventoryTab'),
+    mapView: byId('mapView'),
+    inventoryView: byId('inventoryView'),
+    roomCanvas: byId('roomCanvas'),
+    inspector: byId('inspector'),
+    copySelectedBtn: byId('copySelectedBtn'),
+    pasteItemBtn: byId('pasteItemBtn'),
+    deleteSelectedBtn: byId('deleteSelectedBtn'),
+    inventoryBody: byId('inventoryBody'),
+    emptyInventory: byId('emptyInventory'),
+    inventorySearch: byId('inventorySearch'),
+    inventoryRoomFilter: byId('inventoryRoomFilter'),
+    browserFileInput: byId('browserFileInput'),
+    textDialog: byId('textDialog'),
+    textDialogForm: byId('textDialogForm'),
+    textDialogTitle: byId('textDialogTitle'),
+    textDialogLabel: byId('textDialogLabel'),
+    textDialogInput: byId('textDialogInput'),
+    textDialogConfirm: byId('textDialogConfirm'),
+    toast: byId('toast')
+  };
+
+  const state = {
+    project: Model.createProject(),
+    activeRoomId: null,
+    selected: null,
+    view: 'map',
+    currentPath: null,
+    dirty: false,
+    clipboard: null
+  };
+
+  let recoveryTimer = null;
+  let toastTimer = null;
+  let textDialogResolver = null;
+
+  function activeRoom() {
+    return state.project.rooms.find((room) => room.id === state.activeRoomId)
+      || state.project.rooms[0];
+  }
+
+  function escapeHtml(value) {
+    return String(value ?? '')
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&#039;');
+  }
+
+  function showToast(message, isError = false) {
+    clearTimeout(toastTimer);
+    elements.toast.textContent = message;
+    elements.toast.classList.toggle('error', isError);
+    elements.toast.classList.add('show');
+    toastTimer = setTimeout(() => elements.toast.classList.remove('show'), 3600);
+  }
+
+  function clearWebRecovery() {
+    try {
+      localStorage.removeItem(WEB_RECOVERY_KEY);
+    } catch {
+      // File download remains the authoritative project save.
+    }
+  }
+
+  function closeTextDialog(value) {
+    if (!textDialogResolver) return;
+    const resolve = textDialogResolver;
+    textDialogResolver = null;
+    elements.textDialog.hidden = true;
+    resolve(value);
+  }
+
+  function requestText({ title, label, value = '', confirmText = 'Save', maxLength = 100 }) {
+    if (textDialogResolver) closeTextDialog(null);
+    elements.textDialogTitle.textContent = title;
+    elements.textDialogLabel.textContent = label;
+    elements.textDialogInput.maxLength = maxLength;
+    elements.textDialogInput.value = value;
+    elements.textDialogConfirm.textContent = confirmText;
+    elements.textDialog.hidden = false;
+
+    const result = new Promise((resolve) => {
+      textDialogResolver = resolve;
+    });
+    requestAnimationFrame(() => {
+      elements.textDialogInput.focus();
+      elements.textDialogInput.select();
+    });
+    return result;
+  }
+
+  function scheduleRecovery() {
+    clearTimeout(recoveryTimer);
+    recoveryTimer = setTimeout(async () => {
+      if (!window.labAPI) {
+        try {
+          localStorage.setItem(WEB_RECOVERY_KEY, JSON.stringify(state.project));
+        } catch {
+          showToast('Browser recovery storage is unavailable. Download your project regularly.', true);
+        }
+        return;
+      }
+      const result = await window.labAPI.writeRecovery(state.project);
+      if (!result.ok) showToast('Automatic recovery copy could not be updated.', true);
+    }, 650);
+  }
+
+  function markDirty() {
+    state.project.updatedAt = new Date().toISOString();
+    state.dirty = true;
+    updateHeader();
+    renderSummary();
+    scheduleRecovery();
+  }
+
+  function updateHeader() {
+    if (elements.projectName.value !== state.project.name) {
+      elements.projectName.value = state.project.name;
+    }
+    elements.saveState.textContent = state.dirty ? 'Unsaved changes' : (state.currentPath ? 'Saved' : 'Not saved');
+    elements.saveState.classList.toggle('dirty', state.dirty);
+    elements.currentRoomName.textContent = activeRoom()?.name || 'No room';
+  }
+
+  function renderSummary() {
+    const duplicateSerials = Model.getDuplicateSerials(state.project.equipment);
+    const duplicateNames = Model.getDuplicateComputerNames(state.project.equipment);
+    elements.roomCount.textContent = state.project.rooms.length;
+    elements.equipmentCount.textContent = state.project.equipment.length;
+    elements.repairCount.textContent = state.project.equipment.filter((item) => item.status === 'Needs Repair').length;
+    const warnings = [];
+    if (duplicateNames.length) warnings.push(`Duplicate computer ${duplicateNames.length === 1 ? 'name' : 'names'}: ${duplicateNames.join(', ')}`);
+    if (duplicateSerials.length) warnings.push(`Duplicate serial ${duplicateSerials.length === 1 ? 'number' : 'numbers'}: ${duplicateSerials.join(', ')}`);
+    elements.serialWarning.hidden = warnings.length === 0;
+    elements.serialWarning.textContent = warnings.join(' · ');
+  }
+
+  function renderRooms() {
+    elements.roomList.innerHTML = state.project.rooms.map((room) => {
+      const equipment = state.project.equipment.filter((item) => item.roomId === room.id);
+      const repairs = equipment.filter((item) => item.status === 'Needs Repair').length;
+      return `
+        <button class="room-card ${room.id === state.activeRoomId ? 'active' : ''}" data-room-id="${escapeHtml(room.id)}" type="button">
+          <span class="room-thumbnail" aria-hidden="true"></span>
+          <span>
+            <strong>${escapeHtml(room.name)}</strong>
+            <small>${room.desks.length} desks · ${equipment.length} equipment</small>
+          </span>
+          ${repairs ? `<span class="room-repair-count">${repairs} repair</span>` : ''}
+        </button>`;
+    }).join('');
+  }
+
+  function symbolIcon(type) {
+    const common = 'fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"';
+    if (type === 'Laptop') {
+      return `<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="13" y="11" width="38" height="31" rx="3" ${common}/><path d="M7 47h50l-4 7H11l-4-7Z" ${common}/></svg>`;
+    }
+    if (type === 'Keyboard') {
+      return `<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="5" y="15" width="54" height="34" rx="5" ${common}/><path d="M13 24h2m8 0h2m8 0h2m8 0h2M13 33h2m8 0h2m8 0h2m8 0h2M16 41h32" ${common}/></svg>`;
+    }
+    if (type === 'Mouse') {
+      return `<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="18" y="6" width="28" height="52" rx="14" ${common}/><path d="M32 7v16m0 7v4" ${common}/></svg>`;
+    }
+    if (type === 'Monitor') {
+      return `<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="7" y="8" width="50" height="36" rx="3" ${common}/><path d="M25 55h14M32 44v11" ${common}/></svg>`;
+    }
+    if (type === 'Printer') {
+      return `<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M17 22V7h30v15M14 48H8V23h48v25h-6M17 39h30v18H17V39Z" ${common}/><path d="M46 30h3" ${common}/></svg>`;
+    }
+    if (type === 'Desktop Computer') {
+      return `<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="7" y="5" width="42" height="30" rx="3" ${common}/><path d="M20 43h16M28 35v8M7 51h42l-3 8H10l-3-8Zm47-38h5v39h-5" ${common}/><path d="M55 44h1" ${common}/></svg>`;
+    }
+    return `<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="9" y="9" width="46" height="46" rx="8" ${common}/><path d="M22 32h20M32 22v20" ${common}/></svg>`;
+  }
+
+  function renderMap() {
+    const room = activeRoom();
+    if (!room) return;
+
+    elements.roomCanvas.style.width = `${room.width}px`;
+    elements.roomCanvas.style.height = `${room.height}px`;
+    elements.roomCanvas.dataset.roomName = room.name;
+
+    const deskMarkup = room.desks.map((desk) => `
+      <div class="map-item desk ${state.selected?.kind === 'desk' && state.selected.id === desk.id ? 'selected' : ''}"
+        data-kind="desk" data-id="${escapeHtml(desk.id)}"
+        style="left:${desk.x}px;top:${desk.y}px;width:${desk.width}px;height:${desk.height}px"
+        title="${escapeHtml(desk.label)}">
+        <span class="desk-label">${escapeHtml(desk.label)}</span>
+        <span class="resize-handle" aria-hidden="true"></span>
+      </div>`).join('');
+
+    const equipmentMarkup = state.project.equipment
+      .filter((item) => item.roomId === room.id)
+      .map((item) => `
+        <div class="map-item equipment ${item.status === 'Needs Repair' ? 'needs-repair' : ''} ${state.selected?.kind === 'equipment' && state.selected.id === item.id ? 'selected' : ''}"
+          data-kind="equipment" data-id="${escapeHtml(item.id)}"
+          style="left:${item.x}px;top:${item.y}px;width:${item.width}px;height:${item.height}px"
+          title="${escapeHtml(item.type)}${item.computerName ? ` · ${escapeHtml(item.computerName)}` : ''}${item.studentName ? ` · ${escapeHtml(item.studentName)}` : ''}${item.serial ? ` · ${escapeHtml(item.serial)}` : ''}">
+          <span class="equipment-icon">${symbolIcon(item.type)}</span>
+          <span class="equipment-map-label">${equipmentMapLabel(item)}</span>
+          <span class="resize-handle" aria-hidden="true"></span>
+        </div>`).join('');
+
+    elements.roomCanvas.innerHTML = deskMarkup + equipmentMarkup;
+  }
+
+  function optionList(values, selected) {
+    return values.map((value) => `<option value="${escapeHtml(value)}" ${value === selected ? 'selected' : ''}>${escapeHtml(value)}</option>`).join('');
+  }
+
+  function equipmentMapLabel(item) {
+    const primary = item.computerName || item.serial || item.type;
+    return `<strong>${escapeHtml(primary)}</strong>${item.studentName ? `<small>${escapeHtml(item.studentName)}</small>` : ''}`;
+  }
+
+  function selectedRecord() {
+    if (!state.selected) return null;
+    if (state.selected.kind === 'desk') {
+      return activeRoom()?.desks.find((desk) => desk.id === state.selected.id) || null;
+    }
+    return state.project.equipment.find((item) => item.id === state.selected.id) || null;
+  }
+
+  function renderInspector() {
+    const record = selectedRecord();
+    elements.deleteSelectedBtn.disabled = !record;
+    elements.copySelectedBtn.disabled = !record;
+    elements.pasteItemBtn.disabled = !state.clipboard;
+
+    if (!record) {
+      elements.inspector.innerHTML = `
+        <div class="inspector-empty">
+          <div class="empty-icon" aria-hidden="true"></div>
+          <strong>Nothing selected</strong><br>
+          Click a desk or equipment symbol to view and edit its information.
+        </div>`;
+      return;
+    }
+
+    if (state.selected.kind === 'desk') {
+      elements.inspector.innerHTML = `
+        <p class="eyebrow">Selected map object</p>
+        <h2>Desk</h2>
+        <div class="field"><label for="deskLabel">Desk label</label><input id="deskLabel" data-edit-field="label" maxlength="80" value="${escapeHtml(record.label)}"></div>
+        <div class="field-row">
+          <div class="field"><label for="deskWidth">Width</label><input id="deskWidth" data-edit-field="width" type="number" min="60" max="1000" value="${record.width}"></div>
+          <div class="field"><label for="deskHeight">Height</label><input id="deskHeight" data-edit-field="height" type="number" min="40" max="1000" value="${record.height}"></div>
+        </div>
+        <p class="item-id">ID: ${escapeHtml(record.id)}</p>`;
+      return;
+    }
+
+    elements.inspector.innerHTML = `
+      <p class="eyebrow">Selected equipment</p>
+      <h2>${escapeHtml(record.type)}</h2>
+      ${record.status === 'Needs Repair' ? '<div class="repair-banner">Marked as needing repair</div>' : ''}
+      <div class="field"><label for="equipmentType">Type of computer/equipment</label><select id="equipmentType" data-edit-field="type">${optionList(Model.EQUIPMENT_TYPES, record.type)}</select></div>
+      <div class="field"><label for="computerName">Computer name (letters, numbers, hyphens)</label><input id="computerName" data-edit-field="computerName" maxlength="63" pattern="[A-Za-z0-9_-]*" placeholder="Example: KCI-155-PC01" value="${escapeHtml(record.computerName)}"></div>
+      <div class="field"><label for="studentName">Student name</label><input id="studentName" data-edit-field="studentName" maxlength="160" placeholder="Optional student assignment" value="${escapeHtml(record.studentName)}"></div>
+      <div class="field"><label for="equipmentSerial">Serial number</label><input id="equipmentSerial" data-edit-field="serial" maxlength="160" placeholder="Enter serial number" value="${escapeHtml(record.serial)}"></div>
+      <div class="field"><label for="equipmentStatus">Status</label><select id="equipmentStatus" data-edit-field="status">${optionList(Model.STATUS_VALUES, record.status)}</select></div>
+      <div class="field"><label for="equipmentSpecs">Specifications</label><textarea id="equipmentSpecs" data-edit-field="specs" maxlength="5000" placeholder="Processor, memory, storage, model…">${escapeHtml(record.specs)}</textarea></div>
+      <div class="field"><label for="equipmentNotes">Repair or equipment notes</label><textarea id="equipmentNotes" data-edit-field="notes" maxlength="5000" placeholder="Optional notes…">${escapeHtml(record.notes)}</textarea></div>
+      <div class="inspector-section">
+        <div class="field-row">
+          <div class="field"><label for="equipmentWidth">Map width</label><input id="equipmentWidth" data-edit-field="width" type="number" min="44" max="1000" value="${record.width}"></div>
+          <div class="field"><label for="equipmentHeight">Map height</label><input id="equipmentHeight" data-edit-field="height" type="number" min="44" max="1000" value="${record.height}"></div>
+        </div>
+      </div>
+      <p class="item-id">ID: ${escapeHtml(record.id)}</p>`;
+  }
+
+  function roomOptions(selected, includeAll = false) {
+    const options = state.project.rooms.map((room) => `<option value="${escapeHtml(room.id)}" ${room.id === selected ? 'selected' : ''}>${escapeHtml(room.name)}</option>`).join('');
+    return includeAll ? `<option value="all" ${selected === 'all' ? 'selected' : ''}>All rooms</option>${options}` : options;
+  }
+
+  function renderInventory() {
+    const oldFilter = elements.inventoryRoomFilter.value || 'all';
+    elements.inventoryRoomFilter.innerHTML = roomOptions(oldFilter, true);
+    if ([...elements.inventoryRoomFilter.options].some((option) => option.value === oldFilter)) {
+      elements.inventoryRoomFilter.value = oldFilter;
+    }
+
+    const filterRoom = elements.inventoryRoomFilter.value || 'all';
+    const query = elements.inventorySearch.value.trim().toLowerCase();
+    const duplicates = new Set(Model.getDuplicateSerials(state.project.equipment));
+    const roomName = new Map(state.project.rooms.map((room) => [room.id, room.name]));
+    const filtered = state.project.equipment.filter((item) => {
+      if (filterRoom !== 'all' && item.roomId !== filterRoom) return false;
+      if (!query) return true;
+      return [item.computerName, item.studentName, item.type, item.serial, item.status, item.specs, item.notes, roomName.get(item.roomId)]
+        .some((value) => String(value || '').toLowerCase().includes(query));
+    });
+
+    elements.inventoryBody.innerHTML = filtered.map((item) => {
+      const duplicate = item.serial && duplicates.has(item.serial.trim().toUpperCase());
+      return `
+        <tr data-equipment-id="${escapeHtml(item.id)}" class="${duplicate ? 'duplicate-row' : ''}">
+          <td><select data-inventory-field="roomId" aria-label="Room">${roomOptions(item.roomId)}</select></td>
+          <td><input data-inventory-field="computerName" aria-label="Computer name" maxlength="63" value="${escapeHtml(item.computerName)}" placeholder="KCI-155-PC01"></td>
+          <td><select data-inventory-field="type" aria-label="Equipment type">${optionList(Model.EQUIPMENT_TYPES, item.type)}</select></td>
+          <td><input class="serial-input ${duplicate ? 'duplicate' : ''}" data-inventory-field="serial" aria-label="Serial number" maxlength="160" value="${escapeHtml(item.serial)}" placeholder="Serial number"></td>
+          <td><select data-inventory-field="status" aria-label="Equipment status">${optionList(Model.STATUS_VALUES, item.status)}</select></td>
+          <td><input data-inventory-field="studentName" aria-label="Student name" maxlength="160" value="${escapeHtml(item.studentName)}" placeholder="Student name"></td>
+          <td><input data-inventory-field="specs" aria-label="Specifications" maxlength="5000" value="${escapeHtml(item.specs)}" placeholder="Processor, RAM, storage…"></td>
+          <td><div class="row-actions"><button class="row-button locate" type="button">Locate</button><button class="row-button delete" type="button">Delete</button></div></td>
+        </tr>`;
+    }).join('');
+
+    elements.emptyInventory.hidden = filtered.length !== 0;
+  }
+
+  function renderView() {
+    const mapActive = state.view === 'map';
+    elements.mapView.hidden = !mapActive;
+    elements.inventoryView.hidden = mapActive;
+    elements.mapTab.classList.toggle('active', mapActive);
+    elements.inventoryTab.classList.toggle('active', !mapActive);
+    elements.mapTab.setAttribute('aria-selected', String(mapActive));
+    elements.inventoryTab.setAttribute('aria-selected', String(!mapActive));
+    if (mapActive) {
+      renderMap();
+      renderInspector();
+    } else {
+      renderInventory();
+    }
+  }
+
+  function renderAll() {
+    if (!state.project.rooms.some((room) => room.id === state.activeRoomId)) {
+      state.activeRoomId = state.project.rooms[0].id;
+    }
+    updateHeader();
+    renderRooms();
+    renderSummary();
+    renderView();
+  }
+
+  function switchView(view) {
+    state.view = view;
+    renderView();
+  }
+
+  function selectItem(kind, id) {
+    state.selected = { kind, id };
+    for (const item of elements.roomCanvas.querySelectorAll('.map-item')) {
+      item.classList.toggle('selected', item.dataset.kind === kind && item.dataset.id === id);
+    }
+    renderInspector();
+  }
+
+  function addDesk() {
+    const room = activeRoom();
+    const desk = Model.createDesk(room.id, room.desks.length + 1);
+    room.desks.push(desk);
+    state.selected = { kind: 'desk', id: desk.id };
+    markDirty();
+    renderRooms();
+    renderMap();
+    renderInspector();
+  }
+
+  function addEquipment(type = 'Desktop Computer', stayInInventory = false) {
+    const room = activeRoom();
+    const count = state.project.equipment.filter((item) => item.roomId === room.id).length + 1;
+    const item = Model.createEquipment(room.id, type, count);
+    state.project.equipment.push(item);
+    state.selected = { kind: 'equipment', id: item.id };
+    markDirty();
+    renderRooms();
+    if (stayInInventory) renderInventory();
+    else {
+      renderMap();
+      renderInspector();
+    }
+  }
+
+  function copySelected() {
+    const record = selectedRecord();
+    if (!record) return;
+    state.clipboard = {
+      kind: state.selected.kind,
+      data: JSON.parse(JSON.stringify(record))
+    };
+    elements.pasteItemBtn.disabled = false;
+    showToast(`${state.selected.kind === 'desk' ? 'Desk' : 'Equipment'} copied. Press Ctrl+V to paste it.`);
+  }
+
+  function pasteCopied() {
+    if (!state.clipboard) return;
+    const room = activeRoom();
+    const source = JSON.parse(JSON.stringify(state.clipboard.data));
+
+    if (state.clipboard.kind === 'desk') {
+      const width = Math.min(source.width, room.width);
+      const height = Math.min(source.height, room.height);
+      const copy = {
+        ...source,
+        id: Model.createId('desk'),
+        roomId: room.id,
+        label: `${source.label || 'Desk'} copy`,
+        width,
+        height,
+        x: Math.min(room.width - width, Math.max(0, source.x + 20)),
+        y: Math.min(room.height - height, Math.max(0, source.y + 20))
+      };
+      room.desks.push(copy);
+      state.selected = { kind: 'desk', id: copy.id };
+      state.clipboard.data.x = copy.x;
+      state.clipboard.data.y = copy.y;
+      markDirty();
+      renderAll();
+      showToast('Desk pasted.');
+      return;
+    }
+
+    const width = Math.min(source.width, room.width);
+    const height = Math.min(source.height, room.height);
+    const copy = {
+      ...source,
+      id: Model.createId('equipment'),
+      roomId: room.id,
+      computerName: '',
+      studentName: '',
+      serial: '',
+      width,
+      height,
+      x: Math.min(room.width - width, Math.max(0, source.x + 20)),
+      y: Math.min(room.height - height, Math.max(0, source.y + 20))
+    };
+    state.project.equipment.push(copy);
+    state.selected = { kind: 'equipment', id: copy.id };
+    state.clipboard.data.x = copy.x;
+    state.clipboard.data.y = copy.y;
+    markDirty();
+    renderAll();
+    showToast('Computer pasted. Its computer name, serial number, and student name were cleared.');
+  }
+
+  function printMap() {
+    const room = activeRoom();
+    const equipment = state.project.equipment.filter((item) => item.roomId === room.id);
+    const desks = room.desks.map((desk) => `
+      <g>
+        <rect x="${desk.x}" y="${desk.y}" width="${desk.width}" height="${desk.height}" rx="5" fill="#dce4e9" stroke="#697985" stroke-width="2"/>
+        <text x="${desk.x + desk.width / 2}" y="${desk.y + desk.height / 2 + 4}" text-anchor="middle" font-size="12" font-weight="700" fill="#394954">${escapeHtml(desk.label.slice(0, 32))}</text>
+      </g>`).join('');
+    const devices = equipment.map((item) => {
+      const colour = item.status === 'Needs Repair' ? '#c43b44' : '#1768e5';
+      const label = (item.computerName || item.serial || item.type).slice(0, 24);
+      const student = item.studentName.slice(0, 28);
+      const centreX = item.x + item.width / 2;
+      const nameY = item.y + item.height / 2 + (student ? 1 : 6);
+      return `
+        <g>
+          <rect x="${item.x}" y="${item.y}" width="${item.width}" height="${item.height}" rx="8" fill="#ffffff" stroke="${colour}" stroke-width="2"/>
+          <rect x="${centreX - 14}" y="${item.y + 10}" width="28" height="18" rx="2" fill="none" stroke="${colour}" stroke-width="2"/>
+          <path d="M${centreX} ${item.y + 28}v5m-8 0h16" fill="none" stroke="${colour}" stroke-width="2"/>
+          <text x="${centreX}" y="${nameY}" text-anchor="middle" font-size="9" font-weight="700" fill="#263845">${escapeHtml(label)}</text>
+          ${student ? `<text x="${centreX}" y="${nameY + 12}" text-anchor="middle" font-size="8" fill="#526573">${escapeHtml(student)}</text>` : ''}
+        </g>`;
+    }).join('');
+
+    const frame = document.createElement('iframe');
+    frame.setAttribute('title', 'Printable lab map');
+    frame.style.position = 'fixed';
+    frame.style.width = '1px';
+    frame.style.height = '1px';
+    frame.style.right = '0';
+    frame.style.bottom = '0';
+    frame.style.border = '0';
+    document.body.appendChild(frame);
+
+    const printDocument = frame.contentDocument;
+    printDocument.open();
+    printDocument.write(`<!doctype html><html><head><meta charset="utf-8"><title>${escapeHtml(room.name)} map</title><style>
+      @page { size: landscape; margin: 0.4in; }
+      * { box-sizing: border-box; }
+      body { margin: 0; color: #17212b; font-family: Arial, sans-serif; }
+      header { display: flex; align-items: end; justify-content: space-between; margin-bottom: 12px; }
+      h1 { margin: 0; font-size: 21px; }
+      p { margin: 3px 0 0; color: #61707c; font-size: 10px; }
+      .legend { display: flex; gap: 14px; font-size: 9px; }
+      .dot { display: inline-block; width: 8px; height: 8px; margin-right: 4px; border-radius: 50%; }
+      svg { display: block; width: 100%; max-height: 7in; border: 2px solid #9ca9b4; background: #fafbfc; }
+    </style></head><body>
+      <header><div><h1>${escapeHtml(state.project.name)} — ${escapeHtml(room.name)}</h1><p>${room.desks.length} desks · ${equipment.length} equipment · Printed ${escapeHtml(new Date().toLocaleString())}</p></div>
+      <div class="legend"><span><i class="dot" style="background:#1768e5"></i>Working</span><span><i class="dot" style="background:#c43b44"></i>Needs repair</span></div></header>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${room.width} ${room.height}" aria-label="${escapeHtml(room.name)} map">${desks}${devices}</svg>
+    </body></html>`);
+    printDocument.close();
+    setTimeout(() => {
+      frame.contentWindow.focus();
+      frame.contentWindow.print();
+      setTimeout(() => frame.remove(), 1500);
+    }, 250);
+  }
+
+  function deleteSelected() {
+    const record = selectedRecord();
+    if (!record) return;
+    const label = state.selected.kind === 'desk' ? record.label : (record.computerName || record.serial || record.type);
+    if (!window.confirm(`Delete “${label}”? This removes it from the map and inventory.`)) return;
+
+    if (state.selected.kind === 'desk') {
+      const room = activeRoom();
+      room.desks = room.desks.filter((desk) => desk.id !== record.id);
+    } else {
+      state.project.equipment = state.project.equipment.filter((item) => item.id !== record.id);
+    }
+    state.selected = null;
+    markDirty();
+    renderAll();
+  }
+
+  function updateSelectedElement(record) {
+    const element = elements.roomCanvas.querySelector(`.map-item[data-id="${CSS.escape(record.id)}"]`);
+    if (!element) return;
+    element.style.left = `${record.x}px`;
+    element.style.top = `${record.y}px`;
+    element.style.width = `${record.width}px`;
+    element.style.height = `${record.height}px`;
+    if (state.selected.kind === 'desk') {
+      element.querySelector('.desk-label').textContent = record.label;
+      element.title = record.label;
+    } else {
+      element.classList.toggle('needs-repair', record.status === 'Needs Repair');
+      element.querySelector('.equipment-icon').innerHTML = symbolIcon(record.type);
+      element.querySelector('.equipment-map-label').innerHTML = equipmentMapLabel(record);
+      element.title = `${record.type}${record.computerName ? ` · ${record.computerName}` : ''}${record.studentName ? ` · ${record.studentName}` : ''}${record.serial ? ` · ${record.serial}` : ''}`;
+    }
+  }
+
+  function onCanvasPointerDown(event) {
+    const itemElement = event.target.closest('.map-item');
+    if (!itemElement) return;
+    event.preventDefault();
+
+    const kind = itemElement.dataset.kind;
+    const id = itemElement.dataset.id;
+    if (state.selected?.kind !== kind || state.selected?.id !== id) selectItem(kind, id);
+    const record = selectedRecord();
+    if (!record) return;
+
+    const room = activeRoom();
+    const resizing = Boolean(event.target.closest('.resize-handle'));
+    const start = {
+      pointerX: event.clientX,
+      pointerY: event.clientY,
+      x: record.x,
+      y: record.y,
+      width: record.width,
+      height: record.height
+    };
+    let moved = false;
+
+    function onMove(moveEvent) {
+      const deltaX = moveEvent.clientX - start.pointerX;
+      const deltaY = moveEvent.clientY - start.pointerY;
+      if (!moved && Math.abs(deltaX) + Math.abs(deltaY) < 2) return;
+      if (!moved) {
+        moved = true;
+        markDirty();
+      }
+
+      const snap = moveEvent.shiftKey ? 1 : 10;
+      if (resizing) {
+        const minimum = kind === 'desk' ? { width: 60, height: 40 } : { width: 44, height: 44 };
+        record.width = Math.min(room.width - record.x, Math.max(minimum.width, Math.round((start.width + deltaX) / snap) * snap));
+        record.height = Math.min(room.height - record.y, Math.max(minimum.height, Math.round((start.height + deltaY) / snap) * snap));
+      } else {
+        record.x = Math.min(room.width - record.width, Math.max(0, Math.round((start.x + deltaX) / snap) * snap));
+        record.y = Math.min(room.height - record.height, Math.max(0, Math.round((start.y + deltaY) / snap) * snap));
+      }
+      updateSelectedElement(record);
+    }
+
+    function onUp() {
+      document.removeEventListener('pointermove', onMove);
+      document.removeEventListener('pointerup', onUp);
+      if (moved) renderInspector();
+    }
+
+    document.addEventListener('pointermove', onMove);
+    document.addEventListener('pointerup', onUp, { once: true });
+  }
+
+  function confirmDiscardIfNeeded() {
+    return !state.dirty || window.confirm('Discard the current unsaved changes? A recovery copy is kept automatically.');
+  }
+
+  function loadProjectData(raw, filePath = null) {
+    try {
+      state.project = Model.normalizeProject(raw);
+      state.activeRoomId = state.project.rooms[0].id;
+      state.selected = null;
+      state.clipboard = null;
+      state.currentPath = filePath;
+      state.dirty = false;
+      state.view = 'map';
+      elements.inventorySearch.value = '';
+      renderAll();
+      const duplicateCount = Model.getDuplicateSerials(state.project.equipment).length
+        + Model.getDuplicateComputerNames(state.project.equipment).length;
+      showToast(duplicateCount ? `Project opened. Check ${duplicateCount} duplicate identity warning${duplicateCount === 1 ? '' : 's'}.` : 'Project opened.');
+      if (window.labAPI) window.labAPI.clearRecovery();
+      else clearWebRecovery();
+    } catch (error) {
+      showToast(error.message, true);
+    }
+  }
+
+  async function openProject() {
+    if (!confirmDiscardIfNeeded()) return;
+    if (!window.labAPI) {
+      elements.browserFileInput.value = '';
+      elements.browserFileInput.click();
+      return;
+    }
+    const result = await window.labAPI.openProject();
+    if (result.canceled) return;
+    if (result.error) return showToast(result.error, true);
+    loadProjectData(result.data, result.filePath);
+  }
+
+  function browserDownloadProject() {
+    const contents = `${JSON.stringify(state.project, null, 2)}\n`;
+    const blob = new Blob([contents], { type: 'application/json' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `${state.project.name.replace(/[^a-z0-9 _-]/gi, '-').trim() || 'Untitled Lab'}.labmap`;
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+    state.currentPath = link.download;
+    state.dirty = false;
+    updateHeader();
+    clearWebRecovery();
+    showToast('Project file downloaded.');
+  }
+
+  async function saveProject(saveAs = false) {
+    state.project.updatedAt = new Date().toISOString();
+    if (!window.labAPI) return browserDownloadProject();
+
+    const result = await window.labAPI.saveProject({
+      data: state.project,
+      currentPath: state.currentPath,
+      saveAs
+    });
+    if (result.canceled) return;
+    if (result.error) return showToast(result.error, true);
+
+    state.currentPath = result.filePath;
+    state.dirty = false;
+    updateHeader();
+    const duplicateCount = Model.getDuplicateSerials(state.project.equipment).length
+      + Model.getDuplicateComputerNames(state.project.equipment).length;
+    showToast(duplicateCount ? `Project saved. ${duplicateCount} duplicate identity warning${duplicateCount === 1 ? ' remains' : 's remain'}.` : 'Project saved successfully.');
+    clearTimeout(recoveryTimer);
+    await window.labAPI.clearRecovery();
+  }
+
+  async function newProject() {
+    if (!confirmDiscardIfNeeded()) return;
+    const name = await requestText({
+      title: 'Create a new project',
+      label: 'Project name',
+      value: 'KCI Computer Labs',
+      confirmText: 'Create project',
+      maxLength: 100
+    });
+    if (name === null) return;
+    state.project = Model.createProject(name.trim() || 'Untitled Lab Project');
+    state.activeRoomId = state.project.rooms[0].id;
+    state.selected = null;
+    state.clipboard = null;
+    state.currentPath = null;
+    state.dirty = true;
+    state.view = 'map';
+    renderAll();
+    scheduleRecovery();
+  }
+
+  async function addRoom() {
+    const name = await requestText({
+      title: 'Add a room',
+      label: 'Room name or number',
+      value: `Room ${state.project.rooms.length + 1}`,
+      confirmText: 'Add room',
+      maxLength: 80
+    });
+    if (!name?.trim()) return;
+    const room = Model.createRoom(name.trim());
+    state.project.rooms.push(room);
+    state.activeRoomId = room.id;
+    state.selected = null;
+    markDirty();
+    renderAll();
+  }
+
+  async function renameRoom() {
+    const room = activeRoom();
+    const name = await requestText({
+      title: 'Rename room',
+      label: 'Room name or number',
+      value: room.name,
+      confirmText: 'Rename',
+      maxLength: 80
+    });
+    if (!name?.trim() || name.trim() === room.name) return;
+    room.name = name.trim().slice(0, 80);
+    markDirty();
+    renderAll();
+  }
+
+  function deleteRoom() {
+    if (state.project.rooms.length === 1) return showToast('A project must contain at least one room.', true);
+    const room = activeRoom();
+    const equipmentCount = state.project.equipment.filter((item) => item.roomId === room.id).length;
+    if (!window.confirm(`Delete “${room.name}”, its ${room.desks.length} desks, and ${equipmentCount} equipment records?`)) return;
+    state.project.rooms = state.project.rooms.filter((item) => item.id !== room.id);
+    state.project.equipment = state.project.equipment.filter((item) => item.roomId !== room.id);
+    state.activeRoomId = state.project.rooms[0].id;
+    state.selected = null;
+    markDirty();
+    renderAll();
+  }
+
+  function bindEvents() {
+    elements.textDialogForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const value = elements.textDialogInput.value.trim();
+      if (value) closeTextDialog(value);
+    });
+    byId('textDialogCancel').addEventListener('click', () => closeTextDialog(null));
+    elements.textDialog.addEventListener('pointerdown', (event) => {
+      if (event.target === elements.textDialog) closeTextDialog(null);
+    });
+
+    elements.projectName.addEventListener('input', () => {
+      state.project.name = elements.projectName.value.slice(0, 100);
+      markDirty();
+    });
+    byId('newProjectBtn').addEventListener('click', newProject);
+    byId('openProjectBtn').addEventListener('click', openProject);
+    byId('saveProjectBtn').addEventListener('click', () => saveProject(false));
+    byId('saveAsBtn').addEventListener('click', () => saveProject(true));
+
+    byId('addRoomBtn').addEventListener('click', addRoom);
+    byId('renameRoomBtn').addEventListener('click', renameRoom);
+    byId('deleteRoomBtn').addEventListener('click', deleteRoom);
+    elements.roomList.addEventListener('click', (event) => {
+      const card = event.target.closest('.room-card');
+      if (!card) return;
+      state.activeRoomId = card.dataset.roomId;
+      state.selected = null;
+      renderAll();
+    });
+
+    elements.mapTab.addEventListener('click', () => switchView('map'));
+    elements.inventoryTab.addEventListener('click', () => switchView('inventory'));
+    byId('addDeskBtn').addEventListener('click', addDesk);
+    for (const button of document.querySelectorAll('.add-equipment')) {
+      button.addEventListener('click', () => addEquipment(button.dataset.type));
+    }
+    elements.deleteSelectedBtn.addEventListener('click', deleteSelected);
+    elements.copySelectedBtn.addEventListener('click', copySelected);
+    elements.pasteItemBtn.addEventListener('click', pasteCopied);
+    byId('printMapBtn').addEventListener('click', printMap);
+    elements.roomCanvas.addEventListener('pointerdown', onCanvasPointerDown);
+    elements.roomCanvas.addEventListener('click', (event) => {
+      if (event.target === elements.roomCanvas) {
+        state.selected = null;
+        renderMap();
+        renderInspector();
+      }
+    });
+
+    elements.inspector.addEventListener('input', (event) => {
+      const field = event.target.dataset.editField;
+      if (!field) return;
+      const record = selectedRecord();
+      if (!record) return;
+      if (event.target.type === 'number') {
+        const minimum = field === 'height' && state.selected.kind === 'desk' ? 40 : (state.selected.kind === 'desk' ? 60 : 44);
+        record[field] = Math.min(1000, Math.max(minimum, Number(event.target.value) || minimum));
+      } else {
+        record[field] = field === 'computerName'
+          ? Model.sanitizeComputerName(event.target.value)
+          : event.target.value;
+        if (field === 'computerName' && event.target.value !== record[field]) event.target.value = record[field];
+      }
+      markDirty();
+      updateSelectedElement(record);
+      if (field === 'status' || field === 'type') {
+        renderInspector();
+        renderRooms();
+      }
+    });
+
+    elements.inventorySearch.addEventListener('input', renderInventory);
+    elements.inventoryRoomFilter.addEventListener('change', renderInventory);
+    byId('inventoryAddBtn').addEventListener('click', () => addEquipment('Desktop Computer', true));
+    elements.inventoryBody.addEventListener('input', (event) => {
+      const field = event.target.dataset.inventoryField;
+      const row = event.target.closest('tr[data-equipment-id]');
+      if (!field || !row) return;
+      const item = state.project.equipment.find((entry) => entry.id === row.dataset.equipmentId);
+      if (!item) return;
+      item[field] = field === 'computerName'
+        ? Model.sanitizeComputerName(event.target.value)
+        : event.target.value;
+      if (field === 'computerName' && event.target.value !== item[field]) event.target.value = item[field];
+      markDirty();
+      if (field === 'roomId') renderRooms();
+    });
+    elements.inventoryBody.addEventListener('change', (event) => {
+      if (event.target.dataset.inventoryField) renderInventory();
+    });
+    elements.inventoryBody.addEventListener('click', (event) => {
+      const row = event.target.closest('tr[data-equipment-id]');
+      if (!row) return;
+      const item = state.project.equipment.find((entry) => entry.id === row.dataset.equipmentId);
+      if (!item) return;
+      if (event.target.closest('.locate')) {
+        state.activeRoomId = item.roomId;
+        state.selected = { kind: 'equipment', id: item.id };
+        state.view = 'map';
+        renderAll();
+      }
+      if (event.target.closest('.delete')) {
+        state.activeRoomId = item.roomId;
+        state.selected = { kind: 'equipment', id: item.id };
+        deleteSelected();
+      }
+    });
+
+    elements.browserFileInput.addEventListener('change', async () => {
+      const file = elements.browserFileInput.files[0];
+      if (!file) return;
+      try {
+        loadProjectData(JSON.parse(await file.text()), file.name);
+      } catch (error) {
+        showToast(`Unable to open that project: ${error.message}`, true);
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && textDialogResolver) {
+        event.preventDefault();
+        closeTextDialog(null);
+        return;
+      }
+      const commandKey = event.ctrlKey || event.metaKey;
+      const editingText = ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName);
+      if (commandKey && event.key.toLowerCase() === 's') {
+        event.preventDefault();
+        saveProject(event.shiftKey);
+      }
+      if (commandKey && event.key.toLowerCase() === 'o') {
+        event.preventDefault();
+        openProject();
+      }
+      if (commandKey && event.key.toLowerCase() === 'c' && !editingText && state.selected) {
+        event.preventDefault();
+        copySelected();
+      }
+      if (commandKey && event.key.toLowerCase() === 'v' && !editingText && state.clipboard) {
+        event.preventDefault();
+        pasteCopied();
+      }
+      if ((event.key === 'Delete' || event.key === 'Backspace') && state.selected) {
+        const tag = document.activeElement?.tagName;
+        if (!['INPUT', 'TEXTAREA', 'SELECT'].includes(tag)) {
+          event.preventDefault();
+          deleteSelected();
+        }
+      }
+    });
+  }
+
+  async function offerRecovery() {
+    let recovery;
+    if (window.labAPI) {
+      recovery = await window.labAPI.loadRecovery();
+    } else {
+      try {
+        const data = JSON.parse(localStorage.getItem(WEB_RECOVERY_KEY) || 'null');
+        recovery = data ? { found: true, data } : { found: false };
+      } catch {
+        recovery = { found: false };
+      }
+    }
+    if (!recovery.found) return;
+    try {
+      const normalized = Model.normalizeProject(recovery.data);
+      const meaningful = normalized.equipment.length
+        || normalized.rooms.length > 1
+        || normalized.rooms.some((room) => room.desks.length);
+      if (meaningful && window.confirm('Restore the last automatic recovery copy?')) {
+        state.project = normalized;
+        state.activeRoomId = normalized.rooms[0].id;
+        state.currentPath = null;
+        state.dirty = true;
+        renderAll();
+        showToast('Automatic recovery copy restored. Use Save As to keep it.');
+      }
+    } catch {
+      // An unreadable recovery file never blocks starting a new project.
+    }
+  }
+
+  state.activeRoomId = state.project.rooms[0].id;
+  if (!window.labAPI) {
+    byId('saveProjectBtn').textContent = 'Download Save';
+    byId('saveAsBtn').textContent = 'Download Copy';
+  }
+  bindEvents();
+  renderAll();
+  offerRecovery();
+})();
+
+  </script>
+</body>
+</html>
