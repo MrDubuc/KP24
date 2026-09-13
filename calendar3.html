@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#07111f">
+  <meta name="description" content="TDSB Schedule & Calendar View">
+  <title>TDSB Schedule</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%2307111f'/%3E%3Cpath d='M15 23h34v26H15z' fill='%23112639' stroke='%236bd5ff' stroke-width='3'/%3E%3Cpath d='M15 29h34M23 15v12M41 15v12' stroke='%236bd5ff' stroke-width='4' stroke-linecap='round'/%3E%3Ccircle cx='32' cy='39' r='5' fill='%23ffbd6b'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #f4f8fb;
+      --muted: #91a7b8;
+      --quiet: #657c8f;
+      --canvas: #07111f;
+      --canvas-deep: #040a12;
+      --surface: #0c1c2c;
+      --surface-2: #11263a;
+      --surface-3: #173047;
+      --line: #28445a;
+      --line-soft: rgba(137, 177, 205, 0.16);
+      --cyan: #6bd5ff;
+      --cyan-deep: #147ca7;
+      --amber: #ffbd6b;
+      --coral: #ff7f73;
+      --violet: #a99aff;
+      --green: #76d6a4;
+      --shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+      --radius: 18px;
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-synthesis: none;
+    }
+
+    * { box-sizing: border-box; }
+    html { background: var(--canvas); }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      min-height: 100vh;
+      min-height: 100dvh;
+      background:
+        radial-gradient(circle at 12% -10%, rgba(40, 122, 170, 0.38), transparent 38rem),
+        radial-gradient(circle at 92% 20%, rgba(45, 87, 125, 0.17), transparent 34rem),
+        var(--canvas);
+      color: var(--ink);
+      display: flex;
+      flex-direction: column;
+    }
+
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button:focus-visible, a:focus-visible {
+      outline: 3px solid rgba(107, 213, 255, 0.76);
+      outline-offset: 3px;
+    }
+    button { border: 0; color: inherit; font: inherit; }
+
+    .app {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      height: 100dvh;
+      padding: clamp(0.75rem, 2vw, 1.5rem) clamp(1rem, 2.5vw, 2.25rem);
+      overflow: hidden;
+    }
+
+    /* Top bar */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      min-height: 3.25rem;
+      margin-bottom: clamp(0.75rem, 1.5vw, 1.25rem);
+      flex-shrink: 0;
+    }
+
+    .brand { display: flex; align-items: center; gap: 0.85rem; min-width: 0; }
+
+    .brand-mark {
+      width: 2.75rem;
+      height: 2.75rem;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(107, 213, 255, 0.55);
+      border-radius: 12px;
+      color: var(--cyan);
+      background: linear-gradient(145deg, rgba(107, 213, 255, 0.14), rgba(107, 213, 255, 0.03));
+      box-shadow: inset 0 0 18px rgba(107, 213, 255, 0.08);
+    }
+
+    .brand-mark svg { width: 1.4rem; height: 1.4rem; }
+    .brand-copy { min-width: 0; }
+    .brand-name { margin: 0; font-size: 1.05rem; font-weight: 800; letter-spacing: -0.02em; }
+
+    .sync-line {
+      margin: 0.18rem 0 0;
+      color: var(--muted);
+      font-size: 0.8rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .controls { display: flex; align-items: center; justify-content: flex-end; gap: 0.55rem; }
+
+    .status-badge {
+      min-height: 2.45rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.55rem 0.85rem;
+      border: 1px solid var(--line-soft);
+      border-radius: 999px;
+      background: rgba(9, 24, 38, 0.8);
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 750;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .status-dot {
+      width: 0.55rem;
+      height: 0.55rem;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 4px rgba(118, 214, 164, 0.12);
+    }
+
+    .button {
+      min-height: 2.5rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.6rem 0.95rem;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: var(--surface-2);
+      color: var(--ink);
+      font-size: 0.88rem;
+      font-weight: 750;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+    }
+
+    .button:hover { transform: translateY(-1px); border-color: #456982; background: #153049; }
+    .button:active { transform: translateY(0); }
+    .button.icon { width: 2.5rem; padding: 0; }
+    .button svg { width: 1.15rem; height: 1.15rem; flex: 0 0 auto; }
+
+    /* Calendar Display Shell */
+    .calendar-card {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #315875;
+      border-radius: var(--radius);
+      background: rgba(12, 29, 45, 0.86);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      min-height: 0;
+      position: relative;
+    }
+
+    .calendar-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 4px;
+      background: var(--cyan);
+      z-index: 2;
+    }
+
+    .calendar-frame {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      flex: 1;
+      background: #ffffff; /* Google's embed canvas */
+    }
+
+    @media (max-width: 610px) {
+      .sync-line { display: none; }
+      .status-badge { display: none; }
+      .app { padding: 0.75rem; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M4.5 7.5h15v12h-15zM7.5 4v5M16.5 4v5M4.5 11h15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="brand-copy">
+          <h1 class="brand-name">TDSB Calendar</h1>
+          <p class="sync-line">Toronto District School Board Schedule</p>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="status-badge" aria-live="polite">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span>Live Feed</span>
+        </div>
+
+        <a class="button" href="https://calendar.google.com/calendar/embed?src=tdsb.on.ca_5vqe66di9itgh087nj7fitmvd4%40group.calendar.google.com&ctz=America%2FToronto" target="_blank" rel="noopener noreferrer" title="Open directly in Google Calendar">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="button-label">Open Full</span>
+        </a>
+
+        <button class="button icon" id="refreshButton" type="button" aria-label="Refresh calendar" title="Refresh calendar">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M19 8a8 8 0 1 0 1 7M19 4v4h-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <button class="button icon" id="fullscreenButton" type="button" aria-label="Toggle full screen" title="Full screen">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M8 4H4v4M16 4h4v4M20 16v4h-4M4 16v4h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <section class="calendar-card">
+      <iframe
+        id="calendarIframe"
+        class="calendar-frame"
+        src="https://calendar.google.com/calendar/embed?src=tdsb.on.ca_5vqe66di9itgh087nj7fitmvd4%40group.calendar.google.com&ctz=America%2FToronto"
+        title="TDSB Calendar Embed">
+      </iframe>
+    </section>
+  </main>
+
+  <script>
+    const iframe = document.getElementById('calendarIframe');
+    const refreshBtn = document.getElementById('refreshButton');
+    const fullscreenBtn = document.getElementById('fullscreenButton');
+
+    // Reload iframe content on click
+    refreshBtn.addEventListener('click', () => {
+      iframe.src = iframe.src;
+    });
+
+    // Full screen toggle
+    fullscreenBtn.addEventListener('click', async () => {
+      try {
+        if (!document.fullscreenElement) {
+          await document.documentElement.requestFullscreen();
+        } else {
+          await document.exitFullscreen();
+        }
+      } catch (err) {
+        console.warn('Fullscreen unavailable:', err);
+      }
+    });
+
+    document.addEventListener('fullscreenchange', () => {
+      const isFull = Boolean(document.fullscreenElement);
+      fullscreenBtn.setAttribute('aria-label', isFull ? 'Exit full screen' : 'Toggle full screen');
+      fullscreenBtn.title = isFull ? 'Exit full screen' : 'Full screen';
+    });
+  </script>
+</body>
+</html>
